@@ -62,15 +62,41 @@ $("body").append(`
         <div id="resultados-mensaje" class="resultados"></div>
         </div>
         </div> 
-        
-        
-        
-        
-    </div> 
-      
-        
+     </div>
+     
+     <div id="desafio-ajax">
+     <div>
+     <input id="input-crypto" type="text"></input>
+     <button id="btn-json">Desafio Ajax (MOSTRAR DATOS API</button>
+     </div>
+     <div id="datos-api">
+     </div>
+     </div>
+             
 </div>
 `)
+let URL = "https://api.coincap.io/v2/assets/"
+let crypto;
+const datosApi = $("#datos-api");
+const btnJson = $("#btn-json");
+
+btnJson.click(()=>{
+crypto = $("#input-crypto").val();
+
+URL = URL + crypto.toLowerCase();//aca le estas diciendo que los datos que ingreses en el input sean los que busque en la api
+//aca estas llamando a la API
+$.get(URL,(data)=>{
+
+    $("#datos-api").append(`
+    <div>Nombre: ${data.data["name"]}</div>
+    <div>Simbolo: ${data.data["symbol"]}</div>
+    <div>Precio: ${data.data["priceUsd"]}</div>
+    
+    `)
+    console.log(data)
+    })
+    })
+
 //aca le decimos al script cual es la ubicacion de los elementos donde vamos a agregar 
 const nombreRes = $("#resultados-nombre");
 const phoneRes = $("#resultados-phone");
@@ -120,61 +146,6 @@ $('#form').submit((event)=>{
     const newUsuario = new Usuario (nombre, phone, email, mensaje) //Aca estas creando una NUEVA INSTANCIA del nuevo usuario para posteriormente pushearla al array
 createSesion(newUsuario);//Aca enviastes los datos que guardaste en la nueva instancia bajo la variable newusuario al array que ya lo definimos mas arriba como predefinido al localStorage
 
-
-
-
-
-//   const errores = '';
-
-// Validado Nombre ==============================
-//   if( nombre == '' ){
-    //       errores += '<p>Escriba un nombre</p>';
-    //       nombre.css("border-bottom-color", "#F14B4B")
-    //   } else{
-        //       nombre.css("border-bottom-color", "#d1d1d1")
-        //   }
-        
-        // Validado Correo ==============================
-        //   if( email == '' ){
-            //       errores += '<p>Ingrese un correo</p>';
-            //       email.css("border-bottom-color", "#F14B4B")
-            //   } else{
-                //       email.css("border-bottom-color", "#d1d1d1")
-                //   }
-                
-                // Validado Mensaje ==============================
-                //   if( mensaje == '' ){
-                    //       errores += '<p>Escriba un mensaje</p>';
-    //       mensaje.css("border-bottom-color", "#F14B4B")
-    //   } else{
-        //       mensaje.css("border-bottom-color", "#d1d1d1")
-        //   }
-        
-        
-        
-        // ENVIANDO MENSAJE ============================
-        //   if( errores == '' == false){
-            //      const mensajeModal = '<div class="modal_wrap">'+
-            //                               '<div class="mensaje_modal">'+
-            //                                   '<h3>Errores encontrados</h3>'+
-            //                                   errores+
-            //                                   '<span id="btnClose">Cerrar</span>'+
-            //                               '</div>'+
-            //                           '</div>'
-            
-            //       $('body').append(mensajeModal);
-            //   }
-            
-            // CERRANDO MODAL ==============================
-    //   $('#btnClose').click(function(){
-        //       $('.modal_wrap').remove();
-        //   });
-        //EJECUCION DE VENTANA PARA ENVIAR UN CORREO AL PERSONAL//
-        //   window.open('mailto:' + email + `'?subject=Consulta'` + $('#name').val() + '&body=' + encodeURIComponent($('#mensaje').val()))
-        //   $('#names').val("")
-        //   $('#name').val("")
-        //   $('#email').val("")
-        //   $('#mensaje').val("")
         console.log(nombre)
         console.log(phone)
         console.log(email)
