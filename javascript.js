@@ -46,57 +46,41 @@ $("body").append(`
         
         <div id="encabezados" class="encabezado"> 
         <div class="resultados">   
-        <div  class="titulos">Nombres</div>
-        <div id="resultados-nombre" class="resultados"></div>
+        <div  class="titulos">Nombres:  </div>
+        <div id="resultados-nombre" class="resultado"></div>
         </div>
         <div class="resultados">   
-        <div class="titulos">Celular</div>
-        <div id="resultados-phone" class="resultados"></div>
+        <div class="titulos">Celular:   </div>
+        <div id="resultados-phone" class="resultado"></div>
         </div>   
         <div class="resultados">
-        <div  class="titulos">Email</div>
-        <div id="resultados-email" class="resultados"></div>
+        <div  class="titulos">Email:    </div>
+        <div id="resultados-email" class="resultado"></div>
         </div>
         <div class="resultados">
-        <div class="titulos">Mensaje</div>
-        <div id="resultados-mensaje" class="resultados"></div>
+        <div class="titulos">Mensaje:   </div>
+        <div id="resultados-mensaje" class="resultado"></div>
         </div>
         </div> 
      </div>
-     
-     <div id="desafio-ajax">
-     <div>
-     <input id="input-crypto" type="text"></input>
-     <button id="btn-json">Desafio Ajax (MOSTRAR DATOS API</button>
-     </div>
-     <div id="datos-api">
-     </div>
-     </div>
-             
-</div>
-`)
-let URL = "https://api.coincap.io/v2/assets/"
-let crypto;
-const datosApi = $("#datos-api");
-const btnJson = $("#btn-json");
+     `)
+ 
+     $("body").append(` 
+     <main class="mainAjax">
+        <div class="titleAjax">
+    <h3 class="titleAjax__title">Bienvenido a la busqueda de CRYPTO</h3>
+    <h4 class="titleAjax__subTitle">Utiliza nuestro exclusivo buscador para encontrar info actualizada sobre cualquier criptoactivo</h4>
+        </div>
+        <div id="search" class="search">
+    <input id="input-search" class="inputSearch" type="text"></input>
+    <button id="btnSearch" class="buttonSearch">RASTREAR CRYPTO</button>
+        </div>
+  <div id="result" class="result"></div> 
+    </main>
 
-btnJson.click(()=>{
-crypto = $("#input-crypto").val();
+     `)
 
-URL = URL + crypto.toLowerCase();//aca le estas diciendo que los datos que ingreses en el input sean los que busque en la api
-//aca estas llamando a la API
-$.get(URL,(data)=>{
-
-    $("#datos-api").append(`
-    <div>Nombre: ${data.data["name"]}</div>
-    <div>Simbolo: ${data.data["symbol"]}</div>
-    <div>Precio: ${data.data["priceUsd"]}</div>
-    
-    `)
-    console.log(data)
-    })
-    })
-
+ 
 //aca le decimos al script cual es la ubicacion de los elementos donde vamos a agregar 
 const nombreRes = $("#resultados-nombre");
 const phoneRes = $("#resultados-phone");
@@ -138,7 +122,7 @@ $('#form').submit((event)=>{
     event.preventDefault();
     //aca le estas diciendo que las variables que creaste anteriormente van a tener un valor "x" 
     nombre = $("#name").val();
-    phone = $("#phone").val();
+ phone = $("#phone").val();
     email = $("#email").val();
     mensaje = $("#mensaje").val();
 
@@ -152,21 +136,28 @@ createSesion(newUsuario);//Aca enviastes los datos que guardaste en la nueva ins
         console.log(mensaje)
     });
 
+    $('.form_contact').prepend(` <div class="alert alert-success" role="alert">
+    Resultados mostrados mas abajo!
+    </div>`)
+  
     //boton para mostrar resultados
-    $('#mostrar-resultados').click(
-()=>{
+    $('#mostrar-resultados').click(()=>{
     renderResultados();
-}
-
-    )
+    $('.alert').toggle(2000);
     
-    //Con esta funcion vas a renderizar los resultados a medida que vayas agregandolos SIN RECARGAR LA PAGINA
+        
+      
+})
+//Con esta funcion vas a renderizar los resultados a medida que vayas agregandolos SIN RECARGAR LA PAGINA
+
+
     const renderResultados = ()=>{
         nombreRes.empty();
         phoneRes.empty();
         emailRes.empty();
         // mensajesRes.empty();
         
+    
         
         //vamos a crear un bucle for para poder recorrer los valores del array alojado en el localStorge
     for(let usuario of listaUsuarios){
@@ -184,7 +175,46 @@ createSesion(newUsuario);//Aca enviastes los datos que guardaste en la nueva ins
 
 console.log(listaUsuarios)
     
-    
+//METODO GET PARA API CRYPTO  
+let URL = "https://api.coincap.io/v2/assets/";
+let crypto;
+
+reload = () => {
+    $("#input-search").val("");
+    URL = "https://api.coincap.io/v2/assets/";
+    $("#result").empty();
+  };
+  
+  $("#btnSearch").click(() => {
+    crypto = $("#input-search").val();
+    URL = URL + crypto.toLowerCase();
+    $.get(URL, (data, status) => {
+      price = numeral(data.data["priceUsd"]).format("0.00");
+      capitalizacion = numeral(data.data["marketCapUsd"]).format("0,0.00");
+      if (status !== "success" || crypto === "") {
+        alert("Debes completar correctamente el nombre de la crypto!");
+        throw new Error("Error GET");
+      }
+      $("#result").append(`
+      <div class="headerRanking">
+      <div class="headerRanking__text">Ranking: #${data.data["rank"]}</div>
+      </div>
+      <div class="data">
+      <div class="data__crypto">Crypto: ${data.data["name"]}</div>
+      <div class="data__crypto">Simbolo: ${data.data["symbol"]}</div>
+      <div class="data__crypto">Cotizacion en USD: ${price}</div>
+      <div class="data__crypto">Capitalizacion: ${capitalizacion}</div>
+      </div>
+      
+      
+      `);
+      console.log("Encontrado!");
+      console.log(data.data);
+    });
+    reload();
+  });
+  console.log(URL);
+  
 
     
     

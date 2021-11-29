@@ -238,21 +238,11 @@ form.form_contact input[type="button"]:hover{
 
 
 .table-title{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    margin:auto;  
-    padding:5px;
-    /* width:600px; */
+    border-radius: 2%;
   }
   .table-title h3{
-    color:#181313;
     font-size:30px;
-    font-weight:400;
     text-align: center;
-    font-style:normal;
-    font-family:"Roboto",helvetica,arial,sans-serif;
-    text-shadow:-1px-1px 1px rgba(0,0,0,0.1);
     text-transform:uppercase;
   }
 
@@ -264,21 +254,27 @@ form.form_contact input[type="button"]:hover{
 
 .encabezado {
     display: flex;
-    width: 150px;
+    justify-content: space-around;
+    width: 100%;
 }
 
 .titulos{
     width: 100%;
-    text-align: center;
-    border: 1px solid black;
+    font-weight: 800;
     
 }
-
-.resultados{
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    width: 100%;
+#resultados{
+    margin: 15% 5%;
+    border: #606060 1px solid;
+    border-radius: 1.5%;
+    box-shadow: 2px 5px 2px 5px rgba(0, 0, 0, 0.1);
+}
+#resultados-body{
+display: flex;
+flex-direction: row;
+justify-content: space-around;
+width: 100%;
+margin:5% 0% 5% 0%;
 }
 .divSubmit{
     display: flex;
@@ -293,3 +289,50 @@ form.form_contact input[type="button"]:hover{
     color: black;
     text-shadow: 0 0 15px whitesmoke;
 } 
+
+#desafio-ajax{
+    margin: 5% 0% 5% 2%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#titulo-resultados{
+    background-color: #E25151;
+    width: 100%;
+    padding: 0%;
+    margin: 0%;
+}
+
+.btn{
+    text-decoration: none   !important;
+    text-decoration-style: none !important;
+    background-color: #E25151 !important;
+    border: none;
+    color: white !important;
+}
+/*Seccion de mainAjax====================*/
+main.mainAjax {
+    padding: 6px;
+}
+h3.titleAjax__title {
+    text-align: center;
+    font-family: inherit;
+}
+h4.titleAjax__subTitle {
+    text-align: center;
+    margin-top: 2%;
+}
+div#search {
+    text-align: center;
+    margin-top: 1%;
+}
+button#btnSearch {
+    font-weight: bold;
+    background: tan;
+}
+div#result {
+    text-align: center;
+    margin-top: 2%;
+    font-weight: 700;
+}
