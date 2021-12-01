@@ -29,7 +29,7 @@ $("body").append(`
           <label for="mensaje">Mensaje *</label>
           <textarea id="mensaje" required></textarea>
         <div class="divSubmit">
-        <button id="btnSend" type="submit" class="boton-submit">Enviar Mensaje</button>
+        <p class="recuerdo-datos"><b class="color-asterisco">*</b><b>No olvides completar todos tus datos</b></p>
         </div>
           
       </div>

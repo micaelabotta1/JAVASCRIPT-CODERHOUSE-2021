@@ -235,8 +235,12 @@ form.form_contact input[type="button"]:hover{
 	cursor: pointer;
 }
 
-
-
+.recuerdo-datos{
+    font-size: 15px;
+}
+.color-asterisco{
+    color: red;
+}
 .table-title{
     border-radius: 2%;
   }
