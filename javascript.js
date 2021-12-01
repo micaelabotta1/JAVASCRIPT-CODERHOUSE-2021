@@ -33,7 +33,10 @@ $("body").append(`
         </div>
           
       </div>
-  </form>
+      <div class="divBtnGuardar">
+      <button id="btn-guardar" class="btnGuardar" type="submit">Enviar Mensaje</button>
+      </div>
+      </form>
   <button id="mostrar-resultados" type="click" >Mostrar resultados</button>
 
 </section>
@@ -63,9 +66,9 @@ $("body").append(`
         </div>
         </div> 
      </div>
-     `)
- 
-     $("body").append(` 
+     `);
+
+$("body").append(` 
      <main class="mainAjax">
         <div class="titleAjax">
     <h3 class="titleAjax__title">Bienvenido a la busqueda de CRYPTO</h3>
@@ -78,124 +81,127 @@ $("body").append(`
   <div id="result" class="result"></div> 
     </main>
 
-     `)
+     `);
 
- 
-//aca le decimos al script cual es la ubicacion de los elementos donde vamos a agregar 
+//aca le decimos al script cual es la ubicacion de los elementos donde vamos a agregar
 const nombreRes = $("#resultados-nombre");
 const phoneRes = $("#resultados-phone");
 const emailRes = $("#resultados-email");
 const mensajeRes = $("#resultados-mensaje");
 
 class Usuario {
-    constructor(nombre, phone, email, mensaje) { //aca me estaba faltando poner en los argumentos los datos que estas cargando, habian quedado los viejos que pusiste antes
-      this.nombre = nombre;
-      this.phone = phone;
-      this.email = email;
-      this.mensaje = mensaje;
-    }
+  constructor(nombre, phone, email, mensaje) {
+    //aca me estaba faltando poner en los argumentos los datos que estas cargando, habian quedado los viejos que pusiste antes
+    this.nombre = nombre;
+    this.phone = phone;
+    this.email = email;
+    this.mensaje = mensaje;
   }
-  
+}
 
-  let listaUsuarios = JSON.parse(localStorage.getItem("Sesiones")) || []; //Aca le estas diciendo que si hay un nuevo usuario lo mande a listaUsuarios, y en caso de que aun no haya ningun usuario creado te cree un array vacio, porque si no hay un array vacio previamente creado, al momento que quiera pushear un nuevo usuario te va a dar error 
-  
+let listaUsuarios = JSON.parse(localStorage.getItem("Sesiones")) || []; //Aca le estas diciendo que si hay un nuevo usuario lo mande a listaUsuarios, y en caso de que aun no haya ningun usuario creado te cree un array vacio, porque si no hay un array vacio previamente creado, al momento que quiera pushear un nuevo usuario te va a dar error
 
-  //Con esta funcion vas a mandar un nuevo usuario a listaUsuarios
-  const createSesion = (sesion) => {
-    listaUsuarios.push(sesion); //Aca lo manda
-    localStorage.setItem("Sesiones", JSON.stringify(listaUsuarios));//Aca lo manda y a la vez tambien al localStorage en formato JSON
-  };
-  
-  //Esta es una funcion generica que te va a retornar la listaUsuarios, puede ser usada o no pero esta bueno tenerla por las dudas que la necesites
-  const getSesions = () => {
-    return listaUsuarios;
-  };
+//Con esta funcion vas a mandar un nuevo usuario a listaUsuarios
+const createSesion = (sesion) => {
+  listaUsuarios.push(sesion); //Aca lo manda
+  localStorage.setItem("Sesiones", JSON.stringify(listaUsuarios)); //Aca lo manda y a la vez tambien al localStorage en formato JSON
+};
+
+//Esta es una funcion generica que te va a retornar la listaUsuarios, puede ser usada o no pero esta bueno tenerla por las dudas que la necesites
+const getSesions = () => {
+  return listaUsuarios;
+};
 
 //Primero vas a definir las variables que representan a cada input (aca le avisas al script que tenes input en esas ubicaciones)
-let nombre = $("#name")
-let phone = $("#phone")
-let email = $("#email")
-let mensaje = $("#mensaje")
 
+let nombre = $("#name");
+let phone = $("#phone");
+let email = $("#email");
+let mensaje = $("#mensaje");
 //Aca le estas diciendo al formulario que escuche el evento submit asociado al boton
-$('#form').submit((event)=>{
-    event.preventDefault();
-    //aca le estas diciendo que las variables que creaste anteriormente van a tener un valor "x" 
-    nombre = $("#name").val();
- phone = $("#phone").val();
-    email = $("#email").val();
-    mensaje = $("#mensaje").val();
+$("#form").submit((event) => {
+  event.preventDefault();
+  //aca le estas diciendo que las variables que creaste anteriormente van a tener un valor "x"
+  nombre = $("#name").val();
+  phone = $("#phone").val();
+  email = $("#email").val();
+  mensaje = $("#mensaje").val();
 
+  const newUsuario = new Usuario(nombre, phone, email, mensaje); //Aca estas creando una NUEVA INSTANCIA del nuevo usuario para posteriormente pushearla al array
+  createSesion(newUsuario); //Aca enviastes los datos que guardaste en la nueva instancia bajo la variable newusuario al array que ya lo definimos mas arriba como predefinido al localStorage
 
-    const newUsuario = new Usuario (nombre, phone, email, mensaje) //Aca estas creando una NUEVA INSTANCIA del nuevo usuario para posteriormente pushearla al array
-createSesion(newUsuario);//Aca enviastes los datos que guardaste en la nueva instancia bajo la variable newusuario al array que ya lo definimos mas arriba como predefinido al localStorage
+  console.log(nombre);
+  console.log(phone);
+  console.log(email);
+  console.log(mensaje);
+  nombre = $("#name").val("");
+  phone = $("#phone").val("");
+  email = $("#email").val("");
+  mensaje = $("#mensaje").val("");
+});
 
-        console.log(nombre)
-        console.log(phone)
-        console.log(email)
-        console.log(mensaje)
-    });
-
-    $('.form_contact').prepend(` <div class="alert alert-success" role="alert">
+$(".form_contact")
+  .prepend(` <div id="alerta" class="alert alert-success" role="alert">
     Resultados mostrados mas abajo!
-    </div>`)
-  
-    //boton para mostrar resultados
-    $('#mostrar-resultados').click(()=>{
-    renderResultados();
-    $('.alert').toggle(2000);
-    
-        
-      
-})
+    </div>`);
+$("#alerta").hide();
+$(".form_contact")
+  .prepend(` <div id="alerta2" class="alert alert-danger" role="alert">
+    No hay elementos para mostrar!
+    </div>`);
+$("#alerta2").hide();
+//boton para mostrar resultados
+$("#mostrar-resultados").click(() => {
+  renderResultados();
+  getSesions();
+
+  if (listaUsuarios.length > 0) {
+    $("#alerta").toggle(2000).delay(3000).toggle(2000);
+  } else {
+    $("#alerta2").toggle(2000).delay(1000).toggle(2000);
+  }
+});
 //Con esta funcion vas a renderizar los resultados a medida que vayas agregandolos SIN RECARGAR LA PAGINA
+const renderResultados = () => {
+  nombreRes.empty();
+  phoneRes.empty();
+  emailRes.empty();
+  mensajeRes.empty();
 
+  //vamos a crear un bucle for para poder recorrer los valores del array alojado en el localStorge
+  for (let usuario of listaUsuarios) {
+    nombreRes.append(`<div>${usuario.nombre}</div>`);
+    phoneRes.append(`<div>${usuario.phone}</div>`);
+    emailRes.append(`<div>${usuario.email}</div>`);
+    mensajeRes.append(`<div>${usuario.mensaje}</div>`);
 
-    const renderResultados = ()=>{
-        nombreRes.empty();
-        phoneRes.empty();
-        emailRes.empty();
-        // mensajesRes.empty();
-        
-    
-        
-        //vamos a crear un bucle for para poder recorrer los valores del array alojado en el localStorge
-    for(let usuario of listaUsuarios){
-        
-        nombreRes.append(`<div>${usuario.nombre}</div>`);
-        phoneRes.append(`<div>${usuario.phone}</div>`);
-        emailRes.append(`<div>${usuario.email}</div>`);
-        mensajeRes.append(`<div>${usuario.mensaje}</div>`);
-        
-        
-        console.log(usuario)
-    }
-}
-//esta funcion se pone para que lo carge cuando carga la pagina
+    console.log(usuario);
+  }
+};
 
-console.log(listaUsuarios)
-    
-//METODO GET PARA API CRYPTO  
+console.log(listaUsuarios);
+
+//METODO GET PARA API CRYPTO
 let URL = "https://api.coincap.io/v2/assets/";
 let crypto;
 
 reload = () => {
-    $("#input-search").val("");
-    URL = "https://api.coincap.io/v2/assets/";
-    $("#result").empty();
-  };
-  
-  $("#btnSearch").click(() => {
-    crypto = $("#input-search").val();
-    URL = URL + crypto.toLowerCase();
-    $.get(URL, (data, status) => {
-      price = numeral(data.data["priceUsd"]).format("0.00");
-      capitalizacion = numeral(data.data["marketCapUsd"]).format("0,0.00");
-      if (status !== "success" || crypto === "") {
-        alert("Debes completar correctamente el nombre de la crypto!");
-        throw new Error("Error GET");
-      }
-      $("#result").append(`
+  $("#input-search").val("");
+  URL = "https://api.coincap.io/v2/assets/";
+  $("#result").empty();
+};
+
+$("#btnSearch").click(() => {
+  crypto = $("#input-search").val();
+  URL = URL + crypto.toLowerCase();
+  $.get(URL, (data, status) => {
+    price = numeral(data.data["priceUsd"]).format("0.00");
+    capitalizacion = numeral(data.data["marketCapUsd"]).format("0,0.00");
+    if (status !== "success" || crypto === "") {
+      alert("Debes completar correctamente el nombre de la crypto!");
+      throw new Error("Error GET");
+    }
+    $("#result").append(`
       <div class="headerRanking">
       <div class="headerRanking__text">Ranking: #${data.data["rank"]}</div>
       </div>
@@ -208,13 +214,9 @@ reload = () => {
       
       
       `);
-      console.log("Encontrado!");
-      console.log(data.data);
-    });
-    reload();
+    console.log("Encontrado!");
+    console.log(data.data);
   });
-  console.log(URL);
-  
-
-    
-    
+  reload();
+});
+console.log(URL);
