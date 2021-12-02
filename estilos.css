@@ -340,3 +340,8 @@ div#result {
     margin-top: 2%;
     font-weight: 700;
 }
+button#btn-guardar {
+    margin-left: 43%;
+    border-radius: 16%;
+    background: wheat;
+}
